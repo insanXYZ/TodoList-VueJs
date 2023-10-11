@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todolist-vuejs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    [v-cloak]{
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="App" class="mx-auto flex flex-col gap-10 items-center w-2/3 my-10" v-cloak>
+    <div class="text-6xl font-bold font-mono">TodoList-VueJs</div>
+    <form action="" @submit.prevent="sendData" class="flex gap-2 items-center justify-between w-full" >
+      <div class="flex items-center gap-2">
+        <input class="rounded-sm p-1 border border-1 border-black" placeholder="dari pukul" type="text" v-model="first">
+        <input class="rounded-sm p-1 border border-1 border-black" placeholder="sampai pukul" type="text" v-model="last">
+      </div>
+      <input class="rounded-sm p-1 border border-1 border-black w-2/5" placeholder="isi kegiatan" type="text" v-model="activity">
+      <button type="submit" class="w-1/6 bg-green-400 p-1 border border-1 border-black rounded-sm text-white">kirim</button>
+    </form>
+    <div v-if="activities.length > 0" v-for="(items , i) in activities" class="flex flex-col gap-1 w-full">
+      <div class="flex items-center gap-2 px-1 py-2 border rounded-sm">
+        <div class="flex items-center gap-2">
+          <div class="px-2 py-1 rounded-sm border border-black text-center bg-slate-100 cursor-pointer" @click="hapus(i)">Hapus</div>
+          <div class="px-2 py-1 rounded-sm border border-black text-center bg-slate-100 cursor-pointer" @click="beres(i)">Beres</div>
+        </div>
+        <div class="bg-blue-200 px-2 py-1 rounded-sm">{{ items.firstTime }} - {{ items.lastTime }}</div>
+        <div :class="{'line-through' : items.check}">{{ items.activity }}</div>
+      </div>
+    </div>
+    <div v-else>
+      <div>Belum ada catatan kegiatan</div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    Vue.createApp({
+      data(){
+        return{
+          first : '',
+          last : '',
+          activity : '',
+          activities : []
+        }
+      },
+      methods : {
+        sendData(){
+          this.activities.push({
+            "firstTime" : this.first,
+            "lastTime" : this.last,
+            "activity" : this.activity,
+            "check" : false
+          })
+          this.first = ''
+          this.last = ''
+          this.activity = ''
+        },
+        hapus(i){
+          this.activities.splice( i , 1);
+        },
+        beres(i){
+          this.activities[i].check = true
+        }
+      }
+    }).mount("#App")
+  </script>
+</body>
+</html>
